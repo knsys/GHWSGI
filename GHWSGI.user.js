@@ -10,7 +10,7 @@
 // @grant        GM.getResourceUrl
 // @connect      github.com
 // @connect      githubusercontent.com
-// @resource     ghcss https://raw.githubusercontent.com/knsys/GHWSGI/ghwsgi.min.css
+// @resource     ghcss https://raw.githubusercontent.com/knsys/GHWSGI/master/ghwsgi.min.css
 // ==/UserScript==
 
 (function() {
