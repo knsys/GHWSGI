@@ -18,6 +18,7 @@
 
     const wikiLinkPrefix = 'wiki-gh-';
     const wikiSectionClass = "wiki-gh-content";
+    const githubBaseUrl = 'https://github.com';
     addStyle();
     fillWikiLinks();
 
@@ -43,7 +44,7 @@
     }
 
     function generateRealUrlFromGitHub(link){
-        return link.attr('href').replace(wikiLinkPrefix, 'https://github.com/');
+        return link.attr('href').replace(wikiLinkPrefix, `${githubBaseUrl}/`);
     }
 
     function cleanWikiPage(html){
@@ -51,6 +52,12 @@
         el.html(html);
         let wikiWrapper = $('#wiki-wrapper', el);
         $('#wiki-rightbar', wikiWrapper).remove();
+        // Update relative links to redirect to github page in a new tab
+        let relativeLinks = $('a[href^="/"]', wikiWrapper);
+        relativeLinks.each(async function() {
+            $(this).attr('href', githubBaseUrl + $(this).attr('href'));
+            $(this).attr('target', '_BLANK');
+        });
         return wikiWrapper.html();
     }
 
