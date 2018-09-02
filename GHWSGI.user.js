@@ -93,13 +93,13 @@
 
      async function fillWikiLinks(wikiParser){
         $(`a[href^="${wikiLinkPrefix}"]`).each(async function() {
-            await appendWikiFromLink($(this), wikiParser);
+            const html = await _getWikiHtml($(this), wikiParser);
+            const dom = _generateContainerDom();
+            appendWiki($(this), html, dom);
         });
     }
 
-    async function appendWikiFromLink(link, wikiParser){
-        const html = await _getWikiHtml(link, wikiParser);
-        const dom = _generateContainerDom();
+    function appendWiki(link, html, dom){
         dom.subDiv.html(html);
         link.replaceWith(dom.target);
         _updateChangeWikiTriggers();
