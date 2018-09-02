@@ -8,7 +8,6 @@
 // @match        https://www.steamgifts.com/discussion/*/*
 // @grant        GM.xmlHttpRequest
 // @grant        GM.getResourceUrl
-// @grant        GM.addStyle
 // @connect      github.com
 // @connect      githubusercontent.com
 // @resource     ghcss https://raw.githubusercontent.com/knsys/GHWSGI/master/ghwsgi.min.css
@@ -39,7 +38,7 @@
         async addStyle(){
             const cssUrl = await GM.getResourceUrl('ghcss');
             $('head').append(`<link rel="stylesheet" href="${cssUrl}" type="text/css" />`);
-            GM.addStyle('.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}');
+            $('head').append('<style>.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}</style>');
         }
 
         getHtmlToDisplay(html){
@@ -71,7 +70,7 @@
         }
 
         addStyle(){
-            GM.addStyle('.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}');
+            $(head).append('<style>.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}</style>');
         }
 
         getHtmlToDisplay(markdown){
