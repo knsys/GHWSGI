@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Github Wiki Steamgifts Integration
 // @namespace    GHWSGI
-// @version      1.0.1
+// @version      1.0.2
 // @description  Integrate Github wikis into Steamgift discussion
 // @author       knsys
 // @downloadURL  https://github.com/knsys/GHWSGI/raw/master/GHWSGI.user.js
@@ -13,6 +13,7 @@
 // @connect      githubusercontent.com
 // @resource     ghcss https://raw.githubusercontent.com/knsys/GHWSGI/master/ghwsgi.min.css
 // @require      https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // ==/UserScript==
 
 (function() {
