@@ -22,7 +22,9 @@
     const wikiSectionClass = "wiki-gh-content";
     const githubBaseUrl = 'https://github.com';
     const githubMarkdownBaseUrl = 'https://raw.githubusercontent.com';
+    const changeWikiModeClass = 'changeWikiMode';
     const defaultMode = "html";
+    let mode = undefined;
     let wikiParser = undefined;
 
     /**
@@ -84,15 +86,9 @@
 
     bootstrap();
     function bootstrap(){
-        addNavMenuEntry();
-        const mode = getLocalStorageValue('mode', defaultMode);
+        mode = getLocalStorageValue('mode', defaultMode);
         wikiParser = (mode === 'html') ? new HtmlWiki() : new MarkDownWiki();
         fillWikiLinks(wikiParser);
-    }
-
-    function addNavMenuEntry(){
-        const navMenuEntry = '<div class="nav__button-container"><a class="nav__button" href="#">GHWSGI</a></div>';
-        $('.nav__left-container').append(navMenuEntry);
     }
 
      async function fillWikiLinks(wikiParser){
@@ -102,17 +98,19 @@
     }
 
     async function appendWikiFromLink(link, wikiParser){
-        let target = $( `<section><div></div></section>` );
+        const changeWikiHtml = getChangeWikiHtml();
+        let target = $( `<section>${changeWikiHtml}<div></div></section>` );
         target.addClass(wikiSectionClass);
         const linkParams = segmentLinkParameters(link);
         const url = wikiParser.generateUrlFromLink(linkParams);
         if (url === undefined) return;
         let wikiResponse = await getRequest(url);
-        let subDiv = $(target.children('div')[0]);
+        let subDiv = $(target.children('div')[1]);
         subDiv.addClass('jumbotron');
         const html = wikiParser.getHtmlToDisplay(wikiResponse);
         subDiv.html(html);
         link.replaceWith(target);
+        updateChangeWikiTriggers();
     }
 
     function segmentLinkParameters(link){
@@ -120,6 +118,20 @@
         if (params.length === 4) params.push('Home');
         const pageUrl =  (params.length > 5) ? params.slice(4).join('/') : params[4];
         return {user: params[1], repo: params[2], type: params[3], pageUrl: pageUrl};
+    }
+
+    function getChangeWikiHtml(){
+        let current = (mode === 'html') ? 'Github Style': 'SG Style';
+        return `<div class="${changeWikiModeClass}" style="cursor: pointer"><i class="fa fa-retweet" style="vertical-align: initial;margin-right: 0.5rem;"></i><span>Change Wiki Mode (Current: ${current})</span></div>`;
+    }
+
+    function updateChangeWikiTriggers(){
+        $(`.${changeWikiModeClass}`).off('click');
+        $(`.${changeWikiModeClass}`).on("click", function() {
+            if (mode === 'html') setLocalStorageValue('mode', 'markdown');
+            else setLocalStorageValue('mode', 'html');
+            location.reload();
+        });
     }
 
     /**
