@@ -1,18 +1,18 @@
 // ==UserScript==
 // @name         Github Wiki Steamgifts Integration
 // @namespace    GHWSGI
-// @version      1.0.1
+// @version      1.0.2
 // @description  Integrate Github wikis into Steamgift discussion
 // @author       knsys
 // @downloadURL  https://github.com/knsys/GHWSGI/raw/master/GHWSGI.user.js
 // @match        https://www.steamgifts.com/discussion/*/*
 // @grant        GM.xmlHttpRequest
 // @grant        GM.getResourceUrl
-// @grant        GM.addStyle
 // @connect      github.com
 // @connect      githubusercontent.com
 // @resource     ghcss https://raw.githubusercontent.com/knsys/GHWSGI/master/ghwsgi.min.css
 // @require      https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // ==/UserScript==
 
 (function() {
@@ -38,7 +38,7 @@
         async addStyle(){
             const cssUrl = await GM.getResourceUrl('ghcss');
             $('head').append(`<link rel="stylesheet" href="${cssUrl}" type="text/css" />`);
-            GM.addStyle('.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}');
+            $('head').append('<style>.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}</style>');
         }
 
         getHtmlToDisplay(html){
@@ -70,7 +70,7 @@
         }
 
         addStyle(){
-            GM.addStyle('.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}');
+            $('head').append('<style>.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}</style>');
         }
 
         getHtmlToDisplay(markdown){
