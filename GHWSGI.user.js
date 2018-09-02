@@ -101,6 +101,7 @@
 
     function appendWiki(link, html, dom){
         dom.subDiv.html(html);
+        if (link.parent().is('p')) link = $(link.parent());
         link.replaceWith(dom.target);
         _updateChangeWikiTriggers();
     }
