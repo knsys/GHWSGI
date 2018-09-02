@@ -98,34 +98,43 @@
     }
 
     async function appendWikiFromLink(link, wikiParser){
-        const changeWikiHtml = getChangeWikiHtml();
-        let target = $( `<section>${changeWikiHtml}<div></div></section>` );
-        target.addClass(wikiSectionClass);
-        const linkParams = segmentLinkParameters(link);
+        const html = await _getWikiHtml(link, wikiParser);
+        const dom = _generateContainerDom();
+        dom.subDiv.html(html);
+        link.replaceWith(dom.target);
+        _updateChangeWikiTriggers();
+    }
+
+    async function _getWikiHtml(link, wikiParser){
+        const linkParams = _segmentLinkParameters(link);
         const url = wikiParser.generateUrlFromLink(linkParams);
         if (url === undefined) return;
         let wikiResponse = await getRequest(url);
-        let subDiv = $(target.children('div')[1]);
-        subDiv.addClass('jumbotron');
-        const html = wikiParser.getHtmlToDisplay(wikiResponse);
-        subDiv.html(html);
-        link.replaceWith(target);
-        updateChangeWikiTriggers();
+        return wikiParser.getHtmlToDisplay(wikiResponse);
     }
 
-    function segmentLinkParameters(link){
+    function _generateContainerDom(){
+        const changeWikiHtml = _getChangeWikiHtml();
+        let target = $( `<section>${changeWikiHtml}<div></div></section>` );
+        target.addClass(wikiSectionClass);
+        let subDiv = $(target.children('div')[1]);
+        subDiv.addClass('jumbotron');
+        return {target, subDiv};
+    }
+
+    function _segmentLinkParameters(link){
         const params = link.attr('href').split('/');
         if (params.length === 4) params.push('Home');
         const pageUrl =  (params.length > 5) ? params.slice(4).join('/') : params[4];
         return {user: params[1], repo: params[2], type: params[3], pageUrl: pageUrl};
     }
 
-    function getChangeWikiHtml(){
+    function _getChangeWikiHtml(){
         let current = (mode === 'html') ? 'Github Style': 'SG Style';
         return `<div class="${changeWikiModeClass}" style="cursor: pointer"><i class="fa fa-retweet" style="vertical-align: initial;margin-right: 0.5rem;"></i><span>Change Wiki Mode (Current: ${current})</span></div>`;
     }
 
-    function updateChangeWikiTriggers(){
+    function _updateChangeWikiTriggers(){
         $(`.${changeWikiModeClass}`).off('click');
         $(`.${changeWikiModeClass}`).on("click", function() {
             if (mode === 'html') setLocalStorageValue('mode', 'markdown');
