@@ -8,6 +8,7 @@
 // @match        https://www.steamgifts.com/discussion/*/*
 // @grant        GM.xmlHttpRequest
 // @grant        GM.getResourceUrl
+// @grant        GM.addStyle
 // @connect      github.com
 // @connect      githubusercontent.com
 // @resource     ghcss https://raw.githubusercontent.com/knsys/GHWSGI/master/ghwsgi.min.css
@@ -35,6 +36,7 @@
         async addStyle(){
             const cssUrl = await GM.getResourceUrl('ghcss');
             $('head').append(`<link rel="stylesheet" href="${cssUrl}" type="text/css" />`);
+            GM.addStyle('.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}');
         }
 
         getHtmlToDisplay(html){
@@ -53,7 +55,7 @@
 
         generateUrlFromLink({user, repo, type, pageUrl}){
             if (type !== 'wiki') return undefined;
-            return `${githubBaseUrl}/${user}/${repo}/${pageUrl}`;
+            return `${githubBaseUrl}/${user}/${repo}/${type}/${pageUrl}`;
         }
     }
 
@@ -61,15 +63,17 @@
     * Markdown Class
     */
      class MarkDownWiki {
-        constructor() {}
+        constructor() {
+            this.addStyle();
+        }
 
-        async addStyle(){
-            const cssUrl = await GM.getResourceUrl('ghcss');
-            $('head').append(`<link rel="stylesheet" href="${cssUrl}" type="text/css" />`);
+        addStyle(){
+            GM.addStyle('.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}');
         }
 
         getHtmlToDisplay(markdown){
             const converter = new showdown.Converter();
+            converter.setFlavor('github');
             return converter.makeHtml(markdown);
         }
 
@@ -113,8 +117,8 @@
 
     function segmentLinkParameters(link){
         const params = link.attr('href').split('/');
-        if (params.length === 3) params.push('Home');
-        const pageUrl =  (params.length > 4) ? params.slice(3).join('/') : params[4];
+        if (params.length === 4) params.push('Home');
+        const pageUrl =  (params.length > 5) ? params.slice(4).join('/') : params[4];
         return {user: params[1], repo: params[2], type: params[3], pageUrl: pageUrl};
     }
 
