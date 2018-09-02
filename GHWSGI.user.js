@@ -70,7 +70,7 @@
         }
 
         addStyle(){
-            $(head).append('<style>.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}</style>');
+            $('head').append('<style>.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}</style>');
         }
 
         getHtmlToDisplay(markdown){
