@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Github Wiki Steamgifts Integration
 // @namespace    GHWSGI
-// @version      1.0.2
+// @version      1.0.3
 // @description  Integrate Github wikis into Steamgift discussion
 // @author       knsys
 // @downloadURL  https://github.com/knsys/GHWSGI/raw/master/GHWSGI.user.js
@@ -38,7 +38,7 @@
         async addStyle(){
             const cssUrl = await GM.getResourceUrl('ghcss');
             $('head').append(`<link rel="stylesheet" href="${cssUrl}" type="text/css" />`);
-            $('head').append('<style>.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}</style>');
+            $('head').append('<style>.wiki-gh-content .jumbotron{padding:2rem 0;margin-bottom:2rem}</style>');
         }
 
         getHtmlToDisplay(html){
@@ -70,7 +70,7 @@
         }
 
         addStyle(){
-            $('head').append('<style>.wiki-gh-content .jumbotron{padding:2rem 1rem;margin-bottom:2rem;background-color:#e9ecef;border-radius:.3rem}</style>');
+            $('head').append('<style>.wiki-gh-content .jumbotron{padding:2rem 0;margin-bottom:2rem}</style>');
         }
 
         getHtmlToDisplay(markdown){
